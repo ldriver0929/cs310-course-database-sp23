@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 
 public class SectionDAO {
     
@@ -18,7 +19,6 @@ public class SectionDAO {
     public String find(int termid, String subjectid, String num) {
         
         String result = null;
-        
         PreparedStatement ps = null;
         ResultSet rs = null;
         ResultSetMetaData rsmd = null;
@@ -45,10 +45,12 @@ public class SectionDAO {
                 List<JsonObject> resultList = new ArrayList<>();
                 
                 while (rs.next()) {
-                    JsonObject sectionObject = new JsonObject();
+                    JsonObject jsonObject = new JsonObject();
                     
                     
-                    
+ 
+    
+
                     for (int i = 1; i <= numColumns; i++) {
                         String columnName = rsmd.getColumnName(i);
                         Object columnValue = rs.getObject(i);
@@ -58,13 +60,55 @@ public class SectionDAO {
                             Time timeValue = (Time) columnValue;
                             columnValue = timeValue.toString();
                              }
-                        sectionObject.put(columnName, columnValue);
+                          /* 
+                     if (columnName.equals("id")) {
+                        jsonObject.put("termid", columnValue);
+                 
+                    } else if (columnName.equals("num")) {
+                        jsonObject.put("num", columnValue);
+                    } else if (columnName.equals("scheduletypeid")) {
+                        jsonObject.put("scheduletypeid", columnValue);
+                    } else if (columnName.equals("section")) {
+                        jsonObject.put("section", columnValue);
+                    } else if (columnName.equals("days")) {
+                        jsonObject.put("days", columnValue);
+                    } else if (columnName.equals("start")) {
+                        jsonObject.put("start", columnValue);
+                    } else if (columnName.equals("end")) {
+                        jsonObject.put("end", columnValue);
+                    } else if (columnName.equals("where")) {
+                        jsonObject.put("where", columnValue);
+                    } else if (columnName.equals("instructor")) {
+                        jsonObject.put("instructor", columnValue);
+                    } 
+                      else if (columnName.equals("crn")) {
+                          
+                        jsonObject.put("crn", columnValue);
+                       
                     }
-                    resultList.add(sectionObject);
+                       else if (columnName.equals("subjectid")) {
+                        jsonObject.put("subjectid", columnValue);
+                    } */
+                                                }
+                    
+                         jsonObject.put("termid", rs.getObject("termid", Integer.class));
+                         jsonObject.put("scheduletypeid", rs.getObject("scheduletypeid", String.class));
+                         jsonObject.put("instructor", rs.getObject("instructor",String.class));
+                         jsonObject.put("num", rs.getObject("num",Integer.class));
+                             jsonObject.put("start", rs.getObject("start", String.class));
+    jsonObject.put("days", rs.getObject("days", String.class));
+    jsonObject.put("section", rs.getObject("section", String.class));
+    jsonObject.put("end", rs.getObject("end", String.class));
+    jsonObject.put("where", rs.getObject("where", String.class));
+    jsonObject.put("crn", rs.getObject("crn", Integer.class));
+   jsonObject.put("subjectid", rs.getObject("subjectid", String.class));                   
+                    resultList.add(jsonObject);
                 }
                 
                 JsonArray jsonArray = new JsonArray(resultList);
-                result = jsonArray.toJson();
+               
+                result = Jsoner.serialize(jsonArray);
+             
             }
             
         }
@@ -78,7 +122,7 @@ public class SectionDAO {
             
         }
         
-        return result;
+        return result.trim();
         
     }
     
