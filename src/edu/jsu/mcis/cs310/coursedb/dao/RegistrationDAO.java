@@ -8,121 +8,124 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
 public class RegistrationDAO {
-    
-    // INSERT YOUR CODE HERE
-    
+
     private final DAOFactory daoFactory;
-    
+
     public RegistrationDAO(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
-    
-public boolean create(int studentid, int termid, int crn) {
-    boolean result = false;
-    PreparedStatement ps = null;
-    
-    try {
-        Connection conn = daoFactory.getConnection();
 
+    public boolean create(int studentid, int termid, int crn) {
+        boolean result = false;
+        PreparedStatement ps = null;
 
-        if (conn.isValid(0)) {
-    
-            String query = "INSERT INTO registration (studentid, termid, crn) SELECT s.id, t.id, sec.crn FROM student s, term t, section sec WHERE s.id = ? AND t.id = ? AND sec.crn = ?";
-            
+        try {
+            Connection conn = daoFactory.getConnection();
 
+            if (conn.isValid(0)) {
 
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, studentid);
-            ps.setInt(2, termid);
-            ps.setInt(3, crn);
-            int rows = ps.executeUpdate();
-            System.out.println(rows);
-            if (rows > 0) {
-                result = true;
+                String query = "INSERT INTO registration (studentid, termid, crn) SELECT s.id, t.id, sec.crn FROM student s, term t, section sec WHERE s.id = ? AND t.id = ? AND sec.crn = ?";
+
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                ps.setInt(3, crn);
+                int rows = ps.executeUpdate();
+
+                if (rows > 0) {
+                    result = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        if (ps != null) {
-            try { ps.close(); } catch (Exception e) { e.printStackTrace(); }
-        }
+        return result;
     }
-    return result;
-}
 
+    public boolean delete(int studentid, int termid, int crn) {
 
- public boolean delete(int studentid, int termid, int crn) {
-        
-    boolean result = false;
-        
-    PreparedStatement ps = null;
-        
-    try {
-            
-        Connection conn = daoFactory.getConnection();
-            
-        if (conn.isValid(0)) {
-                
-            String query = "DELETE FROM registration WHERE studentid = ? AND termid = ? AND crn = ?";
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, studentid);
-            ps.setInt(2, termid);
-            ps.setInt(3, crn);
-            int rows = ps.executeUpdate();
-            if (rows > 0) {
-                result = true;
+        boolean result = false;
+
+        PreparedStatement ps = null;
+
+        try {
+
+            Connection conn = daoFactory.getConnection();
+
+            if (conn.isValid(0)) {
+
+                String query = "DELETE FROM registration WHERE studentid = ? AND termid = ? AND crn = ?";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                ps.setInt(3, crn);
+                int rows = ps.executeUpdate();
+                if (rows > 0) {
+                    result = true;
+                }
+
             }
-                
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
-            
-    }
-        
-    catch (Exception e) { e.printStackTrace(); }
-        
-    finally {
 
-        if (ps != null) { try { ps.close(); } catch (Exception e) { e.printStackTrace(); } }
-            
+        return result;
     }
-        
-    return result;
-}
 
-  
-   public boolean delete(int studentid, int termid) {
-    boolean result = false;
-    PreparedStatement ps = null;
-        
-    try {
-        Connection conn = daoFactory.getConnection();
-            
-        if (conn.isValid(0)) {
-            String query = "DELETE FROM registration WHERE studentid = ? AND termid = ?";
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, studentid);
-            ps.setInt(2, termid);
-            int rows = ps.executeUpdate();
-                
-            if (rows > 0) {
-                result = true;
+    public boolean delete(int studentid, int termid) {
+        boolean result = false;
+        PreparedStatement ps = null;
+
+        try {
+            Connection conn = daoFactory.getConnection();
+
+            if (conn.isValid(0)) {
+                String query = "DELETE FROM registration WHERE studentid = ? AND termid = ?";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                int rows = ps.executeUpdate();
+
+                if (rows > 0) {
+                    result = true;
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
-    }
-        
-    catch (Exception e) { e.printStackTrace(); }
-        
-    finally {
-        if (ps != null) { 
-            try { ps.close(); } 
-            catch (Exception e) { e.printStackTrace(); } 
-        }
-    }
-        
-    return result;
-}
 
-   public String list(int studentid, int termid) {
+        return result;
+    }
+
+    public String list(int studentid, int termid) {
 
         JsonArray jsonArray = new JsonArray();
         String result = null;
@@ -134,14 +137,15 @@ public boolean create(int studentid, int termid, int crn) {
             Connection conn = daoFactory.getConnection();
 
             if (conn.isValid(0)) {
-                String query = "SELECT studentid, termid, crn FROM registration WHERE studentid = ? AND termid = ?";
+                String query = "SELECT studentid, termid, crn FROM registration WHERE studentid = ? AND termid = ? ORDER BY registration.crn";
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, studentid);
                 ps.setInt(2, termid);
                 rs = ps.executeQuery();
 
                 rsmd = rs.getMetaData();
-
+                result = DAOUtility.getResultSetAsJson(rs, false);
+                /*
                 while (rs.next()) {
                     JsonObject obj = new JsonObject();
                     int numColumns = rsmd.getColumnCount();
@@ -151,7 +155,7 @@ public boolean create(int studentid, int termid, int crn) {
                     }
                     jsonArray.add(obj);
                     result = jsonArray.toJson();
-                }
+                }*/
             }
         } catch (Exception e) {
             e.printStackTrace();
