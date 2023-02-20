@@ -21,7 +21,7 @@ public final class DAOFactory {
         this.password = properties.getProperty(PROPERTY_PASSWORD);
         
         try {
-            conn = DriverManager.getConnection(url, username, password);
+            conn = DriverManager.getConnection(url, username, password);                  
         }
         catch (Exception e) {
             conn = null;

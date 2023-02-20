@@ -33,22 +33,22 @@ public class DAOUtility {
                         }
 
                         if (isSectionDAO) {
-                            jsonObject.put("termid", rs.getObject("termid", Integer.class));
+                            jsonObject.put("termid", rs.getObject("termid", Integer.class).toString());
                             jsonObject.put("scheduletypeid", rs.getObject("scheduletypeid", String.class));
                             jsonObject.put("instructor", rs.getObject("instructor", String.class));
-                            jsonObject.put("num", rs.getObject("num", Integer.class));
+                            jsonObject.put("num", rs.getObject("num", Integer.class).toString());
                             jsonObject.put("start", rs.getObject("start", String.class));
                             jsonObject.put("days", rs.getObject("days", String.class));
                             jsonObject.put("section", rs.getObject("section", String.class));
                             jsonObject.put("end", rs.getObject("end", String.class));
                             jsonObject.put("where", rs.getObject("where", String.class));
-                            jsonObject.put("crn", rs.getObject("crn", Integer.class));
+                            jsonObject.put("crn", rs.getObject("crn", Integer.class).toString());
                             jsonObject.put("subjectid", rs.getObject("subjectid", String.class));
 
                         }
                         if (!isSectionDAO) {
 
-                            jsonObject.put(columnName, columnValue);
+                            jsonObject.put(columnName, columnValue.toString());
                         }
                     }
                     records.add(jsonObject);

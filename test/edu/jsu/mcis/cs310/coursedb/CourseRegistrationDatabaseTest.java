@@ -7,7 +7,7 @@ import com.github.cliftonlabs.json_simple.*;
 
 public class CourseRegistrationDatabaseTest {
 
-    private static final String USERNAME = "jsnellen"; // replace this with your own account name!
+    private static final String USERNAME = "jsmith123"; // replace this with your own account name!
     
     private DAOFactory daoFactory;
     private RegistrationDAO registrationDao;
@@ -258,8 +258,10 @@ public class CourseRegistrationDatabaseTest {
             // CS 201
 
             JsonArray t1 = (JsonArray)Jsoner.deserialize(sectionDao.find(1, "CS", "201"));
+      
             assertEquals(17, t1.size());
             assertEquals(r6, t1);
+            System.out.println(t1);
 
             // CS 230
 
@@ -276,6 +278,7 @@ public class CourseRegistrationDatabaseTest {
             // HY 201
 
             JsonArray t4 = (JsonArray)Jsoner.deserialize(sectionDao.find(1, "HY", "201"));
+            System.out.println(r9);
             assertEquals(6, t4.size());
             assertEquals(r9, t4);
 

@@ -1,10 +1,6 @@
 package edu.jsu.mcis.cs310.coursedb.dao;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.github.cliftonlabs.json_simple.*;
 
 public class SectionDAO {
 
